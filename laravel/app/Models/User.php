@@ -1,14 +1,17 @@
 <?php
 
-namespace App;
+namespace App\Models;
 
+use App\Models\Traits\Pagination;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class User extends Authenticatable
 {
-    use Notifiable;
+    use Notifiable, Pagination;
 
     /**
      * The attributes that are mass assignable.
@@ -36,4 +39,25 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function posts(){
+        return $this->hasMany(Post::class);
+    }
+
+    public function contact(){
+        return $this->hasOne(Contact::class);
+    }
+
+    public function getAll(Request $request)
+    {
+        $query = $this->with('contact');
+        if($request->has('search')){
+            $query->where('name','like',"%{$request->search}%");
+        }
+        return $query->paginate()->appends($request->query())->toJson();
+    }
+
+    public function scopeAdmin($q){
+        return $q->where('role','admin');
+    }
 }

@@ -8,6 +8,11 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
+
+
+import BootstrapVue from 'bootstrap-vue'
+Vue.use(BootstrapVue);
+Vue.use(require('vue-moment'));
 /**
  * The following block of code may be used to automatically register your
  * Vue components. It will recursively scan this directory for the Vue
@@ -19,13 +24,20 @@ window.Vue = require('vue');
 // const files = require.context('./', true, /\.vue$/i);
 // files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default));
 
-Vue.component('example-component', require('./components/ExampleComponent.vue').default);
+Vue.component('posts_index-component', require('./components/Posts/Index').default);
+Vue.component('users_index-component', require('./components/Admin/Users/Index').default);
+
+Vue.component('admin_posts_index-component', require('./components/Admin/Posts/Index').default);
+Vue.component('admin_posts_create-component', require('./components/Admin/Posts/Create').default);
+Vue.component('admin_posts_edit-component', require('./components/Admin/Posts/Edit').default);
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
  * the page. Then, you may begin adding components to this application
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
+
+
 
 const app = new Vue({
     el: '#app',
